@@ -1,0 +1,10 @@
+__pycache__
+.idea
+venv
+*.pyc
+.env
+*.log
+*.iml
+*.pdf
+testing*.py
+*.DS_Store
