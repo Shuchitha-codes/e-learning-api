@@ -1,0 +1,628 @@
+{
+	"info": {
+		"_postman_id": "510374fd-8e79-48bb-9027-da7f72e0934b",
+		"name": "E-Learning API Postman testing",
+		"description": "Full Postman collection for E-Learning API testing (Auth, Courses, Progress, Analytics, Cache)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30238366"
+	},
+	"item": [
+		{
+			"name": "Auth - Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"student1\",\n  \"email\": \"student1@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"student\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/auth/register",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"niths\",\n  \"password\": \"niths\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/auth/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Refresh Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHVkZW50MSIsImV4cCI6MTc1NjEyNTAxMH0.ThJ_RtJTb9TTQszce-hMPjtLcyiOqiFWNkFQhnmznT8\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/auth/refresh",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"auth",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Get Current User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzaWQiLCJyb2xlIjoiaW5zdHJ1Y3RvciIsImp0aSI6IjM0NmFhNjU4LTY3MjUtNDEwMi1iZDUxLTMzOGUyZmNiYjMwMCIsInVzZXJfaWQiOiI2OGEyZDIxMDhlNjBjYzQ2ZDg3MjY2NDIiLCJleHAiOjE3NTU1MjI5ODl9.wrgJnlFdAKUGWnrc5_8MZB_GOQk1xVe_0Qm651CwGMI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHVkZW50MSIsInJvbGUiOiJzdHVkZW50IiwianRpIjoiYWU3ZjQ4NzAtZmU3Yi00OGU1LWFiZWUtM2FkMmQ1ZjZiYzA3IiwidXNlcl9pZCI6IjY4YTMxYzM5OWRmNWM5OGRlNjg1ZmI5ZCIsImV4cCI6MTc1NTUyMjAxMH0.n8MuvT922irMfkAQLDi3UsLqtmQ-Db5zhkJCcmuq2v0",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzaWQiLCJyb2xlIjoiaW5zdHJ1Y3RvciIsImp0aSI6IjM0NmFhNjU4LTY3MjUtNDEwMi1iZDUxLTMzOGUyZmNiYjMwMCIsInVzZXJfaWQiOiI2OGEyZDIxMDhlNjBjYzQ2ZDg3MjY2NDIiLCJleHAiOjE3NTU1MjI5ODl9.wrgJnlFdAKUGWnrc5_8MZB_GOQk1xVe_0Qm651CwGMI\"\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/auth/me",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"auth",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzaWQiLCJleHAiOjE3NTYxMjU5ODl9.8bN9dl5tepJ1xcSAU1-YhU6X3VXLD-DMw3Oqv8OYQFo\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/auth/logout",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Create Course",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "db.courses.insertOne({\n  \"title\": \"FastAPI Fundamentals\",\n  \"description\": \"Learn FastAPI from scratch\",\n  \"category\": \"Programming\",\n  \"tags\": [\"python\", \"api\", \"backend\"],\n  \"instructor_id\": \"instructor1_id\",\n  \"modules\": [\n    {\n      \"id\": \"module_1\",\n      \"title\": \"Introduction to FastAPI\",\n      \"lessons\": [\n        {\n          \"id\": \"lesson_1\",\n          \"title\": \"What is FastAPI?\",\n          \"content\": \"FastAPI is a modern web framework...\",\n          \"video_url\": \"https://example.com/video1.mp4\",\n          \"quizzes\": []\n        }\n      ]\n    }\n  ]\n})\n"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/courses/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"courses",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Get All",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaXRocyIsInJvbGUiOiJpbnN0cnVjdG9yIiwianRpIjoiYWE2ZjczOGQtNTYxNS00NGM0LTkwYTctZDZjYWE4NmVmMGJkIiwidXNlcl9pZCI6IjY4YTJkMjkxNmJiOGRkN2E2MzA0MzMwMSIsImV4cCI6MTc1NTUyMzM5Nn0.6LwJM2jC3ki4gGTlvWmwTjbOk_lBHwOCVajAncA7O3Y",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8001/courses/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"courses",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Get By ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaXRocyIsInJvbGUiOiJpbnN0cnVjdG9yIiwianRpIjoiYWE2ZjczOGQtNTYxNS00NGM0LTkwYTctZDZjYWE4NmVmMGJkIiwidXNlcl9pZCI6IjY4YTJkMjkxNmJiOGRkN2E2MzA0MzMwMSIsImV4cCI6MTc1NTUyMzM5Nn0.6LwJM2jC3ki4gGTlvWmwTjbOk_lBHwOCVajAncA7O3Y",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8001/courses/68a2e334d713e98d4f7c6b72",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"courses",
+						"68a2e334d713e98d4f7c6b72"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Update Course",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaXRocyIsInJvbGUiOiJpbnN0cnVjdG9yIiwianRpIjoiYWE2ZjczOGQtNTYxNS00NGM0LTkwYTctZDZjYWE4NmVmMGJkIiwidXNlcl9pZCI6IjY4YTJkMjkxNmJiOGRkN2E2MzA0MzMwMSIsImV4cCI6MTc1NTUyMzM5Nn0.6LwJM2jC3ki4gGTlvWmwTjbOk_lBHwOCVajAncA7O3Y"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Updated FastAPI Course\",\n  \"description\": \"Updated course description\"\n}\n"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/courses/68a2e334d713e98d4f7c6b72",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"courses",
+						"68a2e334d713e98d4f7c6b72"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Upload Lesson File",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaXRocyIsInJvbGUiOiJpbnN0cnVjdG9yIiwianRpIjoiYWE2ZjczOGQtNTYxNS00NGM0LTkwYTctZDZjYWE4NmVmMGJkIiwidXNlcl9pZCI6IjY4YTJkMjkxNmJiOGRkN2E2MzA0MzMwMSIsImV4cCI6MTc1NTUyMzM5Nn0.6LwJM2jC3ki4gGTlvWmwTjbOk_lBHwOCVajAncA7O3Y"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "upload_file",
+							"type": "file",
+							"src": "/C:/Users/Chini/Downloads/Goldman sachs- Cover letter.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/courses/68a2e334d713e98d4f7c6b72/modules/mod1/lessons/les1/upload",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"courses",
+						"68a2e334d713e98d4f7c6b72",
+						"modules",
+						"mod1",
+						"lessons",
+						"les1",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Progress - Complete Lesson",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaXRocyIsInJvbGUiOiJpbnN0cnVjdG9yIiwianRpIjoiYWE2ZjczOGQtNTYxNS00NGM0LTkwYTctZDZjYWE4NmVmMGJkIiwidXNlcl9pZCI6IjY4YTJkMjkxNmJiOGRkN2E2MzA0MzMwMSIsImV4cCI6MTc1NTUyMzM5Nn0.6LwJM2jC3ki4gGTlvWmwTjbOk_lBHwOCVajAncA7O3Y",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/progress/lessons/les1/complete?user_id=68a31c399df5c98de685fb9d&course_id=68a2e334d713e98d4f7c6b72&time_spent=1800&quiz_score=85",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"progress",
+						"lessons",
+						"les1",
+						"complete"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "68a31c399df5c98de685fb9d"
+						},
+						{
+							"key": "course_id",
+							"value": "68a2e334d713e98d4f7c6b72"
+						},
+						{
+							"key": "time_spent",
+							"value": "1800"
+						},
+						{
+							"key": "quiz_score",
+							"value": "85"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Progress - Dashboard",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaXRocyIsInJvbGUiOiJpbnN0cnVjdG9yIiwianRpIjoiYWE2ZjczOGQtNTYxNS00NGM0LTkwYTctZDZjYWE4NmVmMGJkIiwidXNlcl9pZCI6IjY4YTJkMjkxNmJiOGRkN2E2MzA0MzMwMSIsImV4cCI6MTc1NTUyMzM5Nn0.6LwJM2jC3ki4gGTlvWmwTjbOk_lBHwOCVajAncA7O3Y"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8001/progress/dashboard?user_id=68a31c399df5c98de685fb9d",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"progress",
+						"dashboard"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "68a31c399df5c98de685fb9d"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Progress - Course Progress",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaXRocyIsInJvbGUiOiJpbnN0cnVjdG9yIiwianRpIjoiZjZkM2FiN2QtNWNmZS00ZmJlLWJjMDItOGIxODYwNzNjYjI0IiwidXNlcl9pZCI6IjY4YTJkMjkxNmJiOGRkN2E2MzA0MzMwMSIsImV4cCI6MTc1NTUyNjI1Mn0.q1GRM5OvA28l0m50jAYT7yHAo-78kBJYeeqKVfYumMI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8001/progress/courses/68a2e334d713e98d4f7c6b72\n?user_id=68a2d2916bb8dd7a63043301",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"progress",
+						"courses",
+						"68a2e334d713e98d4f7c6b72\n"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "68a2d2916bb8dd7a63043301"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Analytics - Course Performance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/analytics/courses/{{course_id}}/performance",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"analytics",
+						"courses",
+						"{{course_id}}",
+						"performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Analytics - Student Patterns",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/analytics/students/{{student_id}}/learning-patterns",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"analytics",
+						"students",
+						"{{student_id}}",
+						"learning-patterns"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Analytics - Platform Overview",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8001/analytics/courses/{{course_id}}/performance",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"analytics",
+						"courses",
+						"{{course_id}}",
+						"performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cache - Stats",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/cache/stats",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"cache",
+						"stats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cache - Flush",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/cache/flush",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"cache",
+						"flush"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
