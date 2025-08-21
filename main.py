@@ -3,7 +3,7 @@ import uvicorn
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.routes import auth  # make sure path is correct
-
+from app.routes import cache
 app = FastAPI(title="E-Learning API")
 
 # include auth router
@@ -101,11 +101,13 @@ security = HTTPBearer()
 # Include routers with prefixes
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(course.router, prefix="/courses", tags=["Courses"])
-app.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])
+# app.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])
 app.include_router(progress.router, prefix="/progress", tags=["Progress"])
 app.include_router(cache.router, prefix="/cache", tags=["Cache"])
 # from app.routes.test_redis import router as test_redis_router
 # app.include_router(test_redis_router, tags=["Test"])
+from app.routes import analytics
+app.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])
 
 # Custom OpenAPI to add extra metadata and JWT security
 def custom_openapi():

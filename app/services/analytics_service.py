@@ -9,7 +9,7 @@ class AnalyticsService:
 
     async def course_performance(self, course_id: str):
         cache_key = f"analytics:course:{course_id}"
-        cached = self.redis.get(cache_key)
+        cached = await self.redis.get(cache_key)
         if cached:
             return json.loads(cached)  # parse JSON string
 
@@ -24,18 +24,25 @@ class AnalyticsService:
             "avg_score": result[0]["avg_score"] if result else 0,
             "last_cached": datetime.utcnow().isoformat()
         }
-        self.redis.set(cache_key, json.dumps(response), ex=settings.ANALYTICS_COURSE_TTL)
+        await self.redis.set(cache_key, json.dumps(response), ex=settings.ANALYTICS_COURSE_TTL)
         return response
 
     async def student_learning_patterns(self, student_id: str):
         cache_key = f"analytics:students:{student_id}"
-        cached = self.redis.get(cache_key)
+        cached = await self.redis.get(cache_key)
         if cached:
             return json.loads(cached)
 
         records = await self.db.progress.find({"user_id": student_id}).to_list(None)
         lessons_completed = sum(len(r.get("lessons", [])) for r in records)
-        avg_quiz_score = sum(sum(l.get("quiz_scores", [0]))/len(l.get("quiz_scores", [1])) for r in records for l in r.get("lessons", [])) if records else 0
+        avg_quiz_score = (
+            sum(
+                sum(l.get("quiz_scores", [0])) / len(l.get("quiz_scores", [1]))
+                for r in records
+                for l in r.get("lessons", [])
+            )
+            if records else 0
+        )
         response = {
             "student_id": student_id,
             "lessons_completed": lessons_completed,
@@ -43,23 +50,25 @@ class AnalyticsService:
             "engagement_level": "high" if lessons_completed > 0 else "low",
             "last_cached": datetime.utcnow().isoformat()
         }
-        self.redis.set(cache_key, json.dumps(response), ex=1800)
+        await self.redis.set(cache_key, json.dumps(response), ex=1800)  # 30 minutes
         return response
 
     async def platform_overview(self):
         cache_key = "analytics:platform:overview"
-        cached = self.redis.get(cache_key)
+        cached = await self.redis.get(cache_key)
         if cached:
             return json.loads(cached)
 
         records = await self.db.progress.find().to_list(None)
         total_students = len(set(r["user_id"] for r in records))
         total_courses = len(set(r["course_id"] for r in records))
-        avg_completion_rate = sum(r.get("completion", 0) for r in records)/len(records) if records else 0
+        avg_completion_rate = sum(r.get("completion", 0) for r in records) / len(records) if records else 0
+
         course_counts = {}
         for r in records:
             course_counts[r["course_id"]] = course_counts.get(r["course_id"], 0) + 1
-        most_popular_courses = [{"course_id": k, "enrollments": v} for k,v in course_counts.items()]
+        most_popular_courses = [{"course_id": k, "enrollments": v} for k, v in course_counts.items()]
+
         response = {
             "total_students": total_students,
             "total_courses": total_courses,
@@ -67,5 +76,5 @@ class AnalyticsService:
             "most_popular_courses": most_popular_courses,
             "last_cached": datetime.utcnow().isoformat()
         }
-        self.redis.set(cache_key, json.dumps(response), ex=3600)
+        await self.redis.set(cache_key, json.dumps(response), ex=3600)  # 1 hour
         return response

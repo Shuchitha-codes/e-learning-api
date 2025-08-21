@@ -40,12 +40,12 @@ class CourseCreate(CourseBase):
     pass
 
 class CourseUpdate(BaseModel):
-    title: Optional[str]
-    description: Optional[str]
-    category: Optional[str]
-    tags: Optional[List[str]]
-    modules: Optional[List[Module]]
-    instructor_id: Optional[str]
+    title: Optional[str] = None
+    description: Optional[str] = None
+    category: Optional[str] = None
+    tags: Optional[List[str]] = None
+    modules: Optional[List[str]] = None
+    instructor_id: Optional[str] = None
 
 class CourseOut(CourseBase):
     id: str

@@ -5,6 +5,7 @@ import shutil, os
 
 from bson import ObjectId
 from app.dependencies import get_database
+from app.db import db
 from app.models.course import CourseCreate, CourseUpdate, CourseOut
 
 router = APIRouter()
@@ -26,52 +27,82 @@ async def create_course(
 
 
 # ------------------- Get All Courses -------------------
+def _normalize_course(doc: dict) -> dict:
+    """
+    Coerce a Mongo course document into the shape CourseOut expects.
+    Fills missing fields with safe defaults so Pydantic validation succeeds.
+    """
+    if not doc:
+        return doc
+    c = dict(doc)
+    c["id"] = str(c.pop("_id"))  # map Mongo _id -> id
+
+    # defaults
+    c.setdefault("tags", [])
+    modules = []
+    for m in c.get("modules", []):
+        m = dict(m)
+        m.setdefault("title", "Untitled Module")   # <-- fill missing title
+        m.setdefault("lessons", [])
+        lessons = []
+        for l in m["lessons"]:
+            l = dict(l)
+            l.setdefault("quizzes", [])           # ensure quizzes list exists
+            lessons.append(l)
+        m["lessons"] = lessons
+        modules.append(m)
+    c["modules"] = modules
+    return c
+
+# ------------------- Get All Courses -------------------
 @router.get("/", response_model=List[CourseOut], summary="Get All Courses")
 async def get_courses(db=Depends(get_database)):
-    courses = []
+    items: List[CourseOut] = []
     async for course in db["courses"].find():
-        courses.append(CourseOut(id=str(course["_id"]), **course))
-    return courses
-
+        normalized = _normalize_course(course)
+        items.append(CourseOut(**normalized))
+    return items
 
 # ------------------- Get Course by ID -------------------
 @router.get("/{course_id}", response_model=CourseOut, summary="Get Course by ID")
 async def get_course(course_id: str, db=Depends(get_database)):
     try:
         oid = ObjectId(course_id)
-    except:
+    except Exception:
         raise HTTPException(status_code=400, detail="Invalid course ID")
 
     course = await db["courses"].find_one({"_id": oid})
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
-    return CourseOut(id=str(course["_id"]), **course)
+
+    normalized = _normalize_course(course)
+    return CourseOut(**normalized)
 
 
 # ------------------- Update Course -------------------
-@router.put("/{course_id}", response_model=CourseOut, summary="Update Course (JSON only)")
-async def update_course(
-    course_id: str,
-    course_data: CourseUpdate,  # JSON body for updates
-    db=Depends(get_database)
-):
-    try:
-        oid = ObjectId(course_id)
-    except:
+courses_collection = db["courses"]
+
+@router.put("/courses/{course_id}")
+async def update_course(course_id: str, course: CourseUpdate):
+    # Convert ObjectId
+    if not ObjectId.is_valid(course_id):
         raise HTTPException(status_code=400, detail="Invalid course ID")
 
-    try:
-        update_dict = jsonable_encoder(course_data, exclude_unset=True)
-        result = await db["courses"].update_one({"_id": oid}, {"$set": update_dict})
+    # Only update provided fields
+    update_data = {k: v for k, v in course.dict().items() if v is not None}
 
-        if result.modified_count == 0:
-            raise HTTPException(status_code=404, detail="Course not found or no changes made")
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No valid fields provided for update")
 
-        updated = await db["courses"].find_one({"_id": oid})
-        return CourseOut(id=str(updated["_id"]), **updated)
+    result = await courses_collection.update_one(
+        {"_id": ObjectId(course_id)},
+        {"$set": update_data}
+    )
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Course not found")
+
+    return {"message": "Course updated successfully", "updated_fields": update_data}
 
 
 # ------------------- Delete Course -------------------
